@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DiwaPAY </title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#eff8f4;
+  color:#076648;
+}
+.page{
+  width:100%;
+  max-width:500px;
+  min-height:100vh;
+  margin:auto;
+  padding:35px 24px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.brand{text-align:center;margin-bottom:35px}
+.logo{
+  width:145px;height:145px;
+  margin:0 auto 22px;
+  background:#050505;
+  border:5px solid #f5d16a;
+  border-radius:35px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  color:#f5d16a;
+  box-shadow:0 5px 25px #d5b44b66;
+}
+.symbol{font-size:68px;font-weight:bold}
+.logo small{font-size:20px;font-weight:bold}
+h1{font-size:46px;margin:0}
+h1 span{color:#d5a51c}
+.tagline{letter-spacing:4px;margin-top:12px}
+.field{
+  width:100%;height:62px;
+  margin:9px 0;
+  padding:0 22px;
+  border:1px solid #d9eee5;
+  border-radius:40px;
+  background:white;
+  font-size:17px;
+  outline-color:#078456;
+}
+.links{
+  display:flex;
+  justify-content:space-between;
+  margin:18px 5px;
+}
+a{color:#087253}
+.agree{text-align:center;margin:22px 0}
+button{
+  width:100%;padding:18px;
+  border:0;border-radius:40px;
+  background:#078456;color:white;
+  font-size:20px;font-weight:bold;
+  cursor:pointer;
+}
+.forgot{text-align:center;margin-top:25px}
+footer{text-align:center;color:#75877f;margin-top:40px}
+
+/* Verification popup */
+.overlay{
+  display:none;
+  position:fixed;inset:0;
+  background:#0008;
+  padding:20px;
+  align-items:center;
+  justify-content:center;
+}
+.modal{
+  width:100%;max-width:430px;
+  background:white;color:#111;
+  border-radius:20px;padding:25px;
+  box-shadow:0 10px 40px #0003;
+}
+.modal h2{font-size:25px;margin:5px 0 25px}
+.modal p{color:#707070;line-height:1.5}
+.close{
+  float:right;width:36px;height:36px;
+  padding:0;background:#f1f2f4;
+  color:#333;font-size:24px;
+}
+.otp{
+  width:100%;height:65px;
+  padding:15px;border:2px solid #333;
+  border-radius:14px;font-size:20px;
+  margin:10px 0;
+}
+.send{
+  display:block;text-align:right;
+  color:#2457ef;text-decoration:none;
+  margin-bottom:25px;
+}
+.confirm{background:#1749f5}
+.note{font-size:12px;text-align:center}
+</style>
+</head>
+
+<body>
+<main class="page">
+  <section class="brand">
+    <div class="logo">
+      <div class="symbol">dp</div>
+      <small>DiwaPAY</small>
+    </div>
+    <h1>Diwa<span>PAY</span></h1>
+    <div class="tagline">Fast • Secure • Simple</div>
+  </section>
+
+  <form id="loginForm">
+    <input class="field" type="tel"
+      placeholder="Phone Number"
+      maxlength="10" required>
+
+    <input class="field" type="password"
+      placeholder="Password" required>
+
+    <input class="field" type="password"
+      placeholder="6-Digit PIN"
+      inputmode="numeric" maxlength="6"
+      pattern="[0-9]{6}" required>
+
+    <div class="links">
+      <a href="#register" onclick="Link(event)">Register</a>
+      <label><input type="checkbox"> Remember Me</label>
+    </div>
+
+    <div class="agree">
+      <label><input type="checkbox" required>
+        Agree to User Privacy Agreement</label>
+    </div>
+
+    <button type="submit">Sign In</button>
+    <div class="forgot">
+      <a href="#forgot" onclick="Link(event)">Forgot Password</a>
+    </div>
+  </form>
+
+  <footer>◆<br><br>DiwaPAY v1.0.0 — </footer>
+</main>
+
+<div class="overlay" id="verification">
+  <section class="modal">
+    <button class="close" id="closePopup"
+      type="button" aria-label="Close">×</button>
+
+    <h2>New Device Verification</h2>
+    <p>Please enter the verification code to continue.</p>
+    <p> SMS has been sent. This is a front-end.</p>
+
+    <input class="otp" id="otp"
+      type="text" inputmode="numeric"
+      maxlength="6" placeholder="Enter  code">
+
+    <a href="#" class="send" id="Real">
+      Simulate Send OTP
+    </a>
+
+    <button class="confirm" id="confirm"
+      type="button">Confirm</button>
+
+    <p class="note" id="message" role="status">
+       only — real OTP verification.
+    </p>
+  </section>
+</div>
+
+<script>
+const form = document.getElementById("loginForm");
+const popup = document.getElementById("verification");
+const message = document.getElementById("message");
+
+form.addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  // Front-end preview only; do not transmit credentials.
+  form.reset();
+  popup.style.display = "flex";
+});
+
+document.getElementById("closePopup").onclick = () => {
+  popup.style.display = "none";
+};
+
+document.getElementById("send").onclick = (e) => {
+  e.preventDefault();
+  document.getElementById("otp").value = "";
+  message.textContent = " mode: no SMS was sent.";
+};
+
+document.getElementById("confirm").onclick = () => {
+  message.textContent =
+    "Preview complete. Real verification requires a secure authentication backend.";
+};
+
+function Link(e) {
+  e.preventDefault();
+  alert("This feature is configured in the .");
+}
+</script>
+</body>
+</html>
+```
